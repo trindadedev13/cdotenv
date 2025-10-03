@@ -8,6 +8,11 @@
 int8_t
 cdotenv_load_from_file (struct cdotenv *self, const char *filename)
 {
+  size_t bytes;
+  size_t size;
+  char *src;
+  int8_t result;
+
   FILE *f = fopen (filename, "r");
   if (!f)
     {
@@ -16,10 +21,10 @@ cdotenv_load_from_file (struct cdotenv *self, const char *filename)
     }
 
   fseek (f, 0, SEEK_END);
-  size_t size = ftell (f);
+  size = ftell (f);
   fseek (f, 0, SEEK_SET);
 
-  char *src = malloc ((size + 1) * sizeof (char));
+  src = malloc ((size + 1) * sizeof (char));
   if (src == NULL)
     {
       fclose (f);
@@ -27,7 +32,7 @@ cdotenv_load_from_file (struct cdotenv *self, const char *filename)
       return -1;
     }
 
-  size_t bytes = fread (src, sizeof (char), size, f);
+  bytes = fread (src, sizeof (char), size, f);
   if (bytes < 0)
     {
       free (src);
@@ -45,7 +50,7 @@ cdotenv_load_from_file (struct cdotenv *self, const char *filename)
       return -1;
     }
 
-  int8_t result = cdotenv_load_from_src (self, src);
+  result = cdotenv_load_from_src (self, src);
   if (result != 0)
     {
       free (src);
