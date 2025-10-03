@@ -4,9 +4,17 @@ project (cdotenv)
 
 set (CMAKE_C_STANDARD 90)
 
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic")
+
 set (SOURCES
      cdotenv.c)
 
-add_library (cdotenv
-             STATIC
-             ${SOURCES})
+if (CDOTENV_SHARED)
+  add_library (cdotenv
+               SHARED
+               ${SOURCES})
+else ()
+  add_library (cdotenv
+               STATIC
+               ${SOURCES})
+endif ()
