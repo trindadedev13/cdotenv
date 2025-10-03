@@ -3,7 +3,7 @@
 #include <cdotenv.h>
 
 int
-main ()
+main (void)
 {
   /** load env */
   struct cdotenv env = { 0 };
