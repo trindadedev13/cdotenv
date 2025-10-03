@@ -5,7 +5,8 @@ project (cdotenv_test)
 add_executable (cdotenv_test
                 main.c)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+set (CMAKE_C_STANDARD 90)
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fno-omit-frame-pointer -Wall -Wextra -pedantic")
 
 add_subdirectory (../lib
                   ${CMAKE_CURRENT_BINARY_DIR}/lib)
