@@ -1,13 +1,12 @@
+import java.io.File;
+
 public class Main
 {
   public static final void
   main (final String[] arr) throws Exception
   {
     final CDotEnv env = new CDotEnv ();
-    env.loadFromSrc ("""
-    API_KEY=123456
-    TOKEN=345
-    """);
+    env.loadFromFile (new File("../.env"));
 
     final String apiKey = env.get ("API_KEY");
     final String token = env.get ("TOKEN");
