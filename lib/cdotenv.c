@@ -15,10 +15,10 @@ cdotenv_load_from_file (struct cdotenv *self, const char *filename)
 
   FILE *f = fopen (filename, "r");
   if (!f)
-    {
-      perror ("cdotenv_load_from_file");
-      return -1;
-    }
+  {
+    perror ("cdotenv_load_from_file");
+    return -1;
+  }
 
   fseek (f, 0, SEEK_END);
   size = ftell (f);
@@ -26,37 +26,37 @@ cdotenv_load_from_file (struct cdotenv *self, const char *filename)
 
   src = malloc ((size + 1) * sizeof (char));
   if (src == NULL)
-    {
-      fclose (f);
-      perror ("cdotenv_load_from_file");
-      return -1;
-    }
+  {
+    fclose (f);
+    perror ("cdotenv_load_from_file");
+    return -1;
+  }
 
   bytes = fread (src, sizeof (char), size, f);
   if (bytes < 0)
-    {
-      free (src);
-      fclose (f);
-      perror ("cdotenv_load_from_file");
-      return -1;
-    }
+  {
+    free (src);
+    fclose (f);
+    perror ("cdotenv_load_from_file");
+    return -1;
+  }
   src[bytes] = '\0';
 
   if (src == NULL)
-    {
-      free (src);
-      fclose (f);
-      perror ("cdotenv_load_from_file");
-      return -1;
-    }
+  {
+    free (src);
+    fclose (f);
+    perror ("cdotenv_load_from_file");
+    return -1;
+  }
 
   result = cdotenv_load_from_src (self, src);
   if (result != 0)
-    {
-      free (src);
-      fclose (f);
-      return result;
-    }
+  {
+    free (src);
+    fclose (f);
+    return result;
+  }
 
   free (src);
   fclose (f);
@@ -74,21 +74,21 @@ cdotenv_load_from_src (struct cdotenv *self, const char *src)
   self->vars = malloc (capacity * sizeof (char *));
 
   while (token != NULL)
+  {
+    char k[K_MAX];
+    char v[V_MAX];
+    if (sscanf (token, "%49[^=]=%49s", k, v) == 2)
     {
-      char k[K_MAX];
-      char v[V_MAX];
-      if (sscanf (token, "%49[^=]=%49s", k, v) == 2)
-        {
-          if (i + 2 > capacity)
-            {
-              capacity *= 2;
-              self->vars = realloc (self->vars, capacity * sizeof (char *));
-            }
-          self->vars[i++] = strdup (k);
-          self->vars[i++] = strdup (v);
-        }
-      token = strtok (NULL, "\n");
+      if (i + 2 > capacity)
+      {
+        capacity *= 2;
+        self->vars = realloc (self->vars, capacity * sizeof (char *));
+      }
+      self->vars[i++] = strdup (k);
+      self->vars[i++] = strdup (v);
     }
+    token = strtok (NULL, "\n");
+  }
   self->count = i;
   return 0;
 }
@@ -98,13 +98,13 @@ cdotenv_get (struct cdotenv *self, char **dest, const char *name)
 {
   size_t i;
   for (i = 0; i < self->count; ++i)
+  {
+    if (strcmp (self->vars[i], name) == 0)
     {
-      if (strcmp (self->vars[i], name) == 0)
-        {
-          *dest = self->vars[++i];
-          break;
-        }
+      *dest = self->vars[++i];
+      break;
     }
+  }
   return 0;
 }
 
@@ -113,9 +113,9 @@ cdotenv_clean (struct cdotenv *self)
 {
   size_t i;
   for (i = 0; i < self->count; ++i)
-    {
-      free (self->vars[i]);
-    }
+  {
+    free (self->vars[i]);
+  }
   free (self->vars);
   self->count = 0;
 }

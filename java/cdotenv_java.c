@@ -38,10 +38,10 @@ Java_CDotEnv_nativeGet (JNIEnv *env, jclass clazz, jlong jself,
   char *value = NULL;
   int8_t status = cdotenv_get (self, &value, name);
   if (status == 0 && value != NULL)
-    {
-      jstring jvalue = (*env)->NewStringUTF (env, value);
-      (*env)->SetObjectArrayElement (env, jout, 0, jvalue);
-    }
+  {
+    jstring jvalue = (*env)->NewStringUTF (env, value);
+    (*env)->SetObjectArrayElement (env, jout, 0, jvalue);
+  }
   (*env)->ReleaseStringUTFChars (env, jname, name);
   return (jbyte)status;
 }
